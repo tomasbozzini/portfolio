@@ -1,0 +1,19 @@
+---
+import { site, contact } from '../config/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-line py-10">
+  <div class="shell flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+    <p class="font-ui text-meta text-muted">
+      © {year} {site.name} · {site.location}
+    </p>
+
+    <p class="font-ui text-meta text-muted">
+      <a href={`mailto:${contact.email}`} class="transition-colors hover:text-text">
+        {contact.email}
+      </a>
+    </p>
+  </div>
+</footer>

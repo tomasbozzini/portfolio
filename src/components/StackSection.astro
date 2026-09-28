@@ -1,0 +1,57 @@
+---
+import { stackGroups } from '../config/site';
+import TechLogo from './TechLogo.astro';
+
+// Íconos de cada área (trazo, 24x24).
+const areaIcons: Record<string, string> = {
+  frontend:
+    '<rect x="3" y="4" width="18" height="13" rx="2.5"/><path d="M8 21h8M12 17v4M8.5 9 6.5 10.5 8.5 12M15.5 9l2 1.5-2 1.5M13 8.5l-2 5"/>',
+  backend:
+    '<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v6.2c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8V5.5"/><path d="M4.5 11.7v6.5c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-6.5"/>',
+  ai: '<path d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9z"/><path d="M18.5 3v3.5M16.75 4.75h3.5M5.5 17.5v3M4 19h3"/>',
+};
+---
+
+<div class="grid gap-6 md:grid-cols-3" data-reveal-stagger>
+  {
+    stackGroups.map((group, index) => (
+      <div style={`--i:${index}`}>
+      <article class="floaty glass glow-edge flex h-full flex-col rounded-3xl p-6">
+        <div class="flex items-center gap-4">
+          <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-accent/20 to-accent-2/25 ring-1 ring-accent/30 text-accent">
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              set:html={areaIcons[group.icon]}
+            />
+          </span>
+          <div>
+            <span class="eyebrow">0{index + 1}</span>
+            <h3 class="font-display text-h3 text-text">{group.area}</h3>
+          </div>
+        </div>
+
+        <p class="mt-4 text-sm leading-relaxed text-muted">{group.description}</p>
+
+        <ul class="mt-6 grid grid-cols-2 gap-2.5">
+          {group.items.map((item) => (
+            <li class="group flex items-center gap-2.5 rounded-2xl border border-line/80 bg-ink/40 px-3 py-2.5 transition-colors hover:border-accent/50 hover:bg-surface-2">
+              <span class="grid size-8 shrink-0 place-items-center rounded-xl bg-surface-2 ring-1 ring-line transition-transform duration-300 group-hover:scale-110">
+                <TechLogo name={item} size={17} />
+              </span>
+              <span class="text-[0.8125rem] leading-tight text-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+      </div>
+    ))
+  }
+</div>

@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import { patternSvg } from '../lib/pattern';
+
+interface Props {
+  cover?: ImageMetadata;
+  title: string;
+  category: string;
+  slug: string;
+  /** Para el srcset. Ajustar según el ancho real del hueco. */
+  sizes?: string;
+  eager?: boolean;
+  /** Distingue dos dibujos del mismo proyecto en una misma página. */
+  instance?: string;
+}
+
+const {
+  cover,
+  title,
+  category,
+  slug,
+  sizes = '(min-width: 1024px) 40vw, 100vw',
+  eager = false,
+  instance = 'a',
+} = Astro.props;
+---
+
+{
+  cover ? (
+    <Image
+      src={cover}
+      alt={`Captura del proyecto ${title}`}
+      widths={[480, 800, 1200]}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      class="h-full w-full object-cover"
+    />
+  ) : (
+    <Fragment set:html={patternSvg(category, slug, instance)} />
+  )
+}

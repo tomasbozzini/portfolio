@@ -1,0 +1,696 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Tokens. Casi negro azulado, superficies de vidrio y un acento cian → violeta.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-ink: #070916;
+  --color-ink-deep: #04050d;
+  --color-surface: #11153a;
+  --color-surface-2: #191e4a;
+  --color-line: #2b3270;
+  --color-line-soft: #1d2250;
+  --color-text: #f4f6ff;
+  --color-muted: #a6aed6;
+  --color-accent: #22e8f5;
+  --color-accent-2: #a86bff;
+  --color-accent-3: #ff4fa8;
+  --color-accent-deep: #0f7f88;
+
+  --font-display: var(--ff-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-ui: var(--ff-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--ff-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+
+  --text-display: clamp(2.6rem, 8.5vw, 5.75rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.02em;
+  --text-h2: clamp(1.5rem, 3.2vw, 2.1rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h3: clamp(1.1rem, 1.6vw, 1.3rem);
+  --text-h3--line-height: 1.2;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.4;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-text);
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* El eje de ancho del variable: los títulos van expandidos. */
+    font-stretch: 125%;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  [id] {
+    scroll-margin-top: 6.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilidades propias
+   --------------------------------------------------------------------------- */
+
+/* Ancho de lectura cómodo: menos de 80 caracteres. */
+@utility measure {
+  max-width: 62ch;
+}
+
+/* Contenedor único del sitio. */
+@layer components {
+  /* La clase font-display siempre trae el ancho expandido, sea cual sea el elemento. */
+  .font-display {
+    font-stretch: 125%;
+  }
+
+  .shell {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 76rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .shell {
+      padding-inline: 3rem;
+    }
+  }
+}
+
+/* El "riel": una línea con gradiente de la que cuelgan las secciones.
+   Solo a partir de pantallas grandes, donde hay lugar para el aire. */
+@utility spine {
+  position: relative;
+}
+
+@utility spine-node {
+  position: relative;
+}
+
+@layer components {
+  .spine-node::before {
+    content: "";
+    position: absolute;
+    top: 0.55em;
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background-color: var(--color-accent);
+    box-shadow:
+      0 0 0 4px color-mix(in oklab, var(--color-accent) 18%, transparent),
+      0 0 18px var(--color-accent);
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .spine {
+      padding-left: 2.5rem;
+    }
+    .spine::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--color-line) 5%,
+        color-mix(in oklab, var(--color-accent-2) 40%, var(--color-line)) 50%,
+        var(--color-line) 95%,
+        transparent
+      );
+    }
+    .spine-node::before {
+      display: block;
+      left: calc(-2.5rem - 4px);
+    }
+  }
+
+  /* Prosa de los detalles de proyecto. */
+  .prose {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: color-mix(in oklab, var(--color-text) 85%, var(--color-ink));
+  }
+  .prose > * + * {
+    margin-top: 1.1em;
+  }
+  .prose h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.2;
+    margin-top: 2.5em;
+    color: var(--color-text);
+  }
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+  .prose h3 {
+    font-family: var(--font-ui);
+    font-weight: 500;
+    font-stretch: normal;
+    font-size: 1rem;
+    margin-top: 2em;
+    color: var(--color-text);
+  }
+  .prose strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .prose a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .prose ul {
+    list-style: none;
+    padding-left: 1.25rem;
+  }
+  .prose ul li {
+    position: relative;
+    margin-top: 0.5em;
+  }
+  .prose ul li::before {
+    content: "";
+    position: absolute;
+    left: -1.25rem;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background-color: var(--color-accent);
+  }
+  .prose ol {
+    padding-left: 1.5rem;
+    list-style: decimal;
+  }
+  .prose ol li {
+    margin-top: 0.5em;
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    padding: 0.1em 0.4em;
+    border-radius: 6px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Fondo: grilla técnica que se desvanece + dos auroras que respiran.
+   --------------------------------------------------------------------------- */
+@layer components {
+  .bg-fx {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-fx::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, #000 25%, transparent 78%);
+  }
+  .aurora {
+    position: absolute;
+    width: 44rem;
+    height: 44rem;
+    border-radius: 999px;
+    filter: blur(120px);
+    opacity: 0.4;
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .aurora-c {
+    bottom: -26rem;
+    left: 20%;
+    background: var(--color-accent-3);
+    opacity: 0.22;
+    animation-delay: -6s;
+  }
+  .aurora-a {
+    top: -24rem;
+    left: -14rem;
+    background: var(--color-accent);
+  }
+  .aurora-b {
+    top: -16rem;
+    right: -20rem;
+    background: var(--color-accent-2);
+    animation-delay: -11s;
+  }
+
+  /* Superficie de vidrio: la base de todas las tarjetas. */
+  .glass {
+    background: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--color-surface-2) 85%, transparent),
+      color-mix(in oklab, var(--color-surface) 70%, transparent)
+    );
+    border: 1px solid color-mix(in oklab, var(--color-line) 85%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.05),
+      0 20px 40px -24px rgb(0 0 0 / 0.8);
+  }
+
+  /* Borde con gradiente que se enciende al pasar el mouse. */
+  .glow-edge {
+    position: relative;
+  }
+  .glow-edge::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--color-accent), transparent 40%, transparent 60%, var(--color-accent-3));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .glow-edge:hover::after,
+  .glow-edge:focus-visible::after {
+    opacity: 1;
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, var(--color-text) 15%, var(--color-accent) 50%, var(--color-accent-2) 75%, var(--color-accent-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.8rem 1.6rem;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-deep);
+    background: linear-gradient(100deg, var(--color-accent), var(--color-accent-2) 60%, var(--color-accent-3));
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.1) inset,
+      0 10px 30px -10px color-mix(in oklab, var(--color-accent) 70%, transparent);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.18) inset,
+      0 16px 40px -10px color-mix(in oklab, var(--color-accent-2) 80%, transparent);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: var(--color-text);
+    border: 1px solid var(--color-line);
+    background: color-mix(in oklab, var(--color-surface) 60%, transparent);
+    backdrop-filter: blur(10px);
+    transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  /* Emblema de proyecto: halo de color + placa de vidrio con el ícono.
+     El color llega en --emblem. Lo usan ProjectEmblem.astro y ProjectGrid.tsx. */
+  .emblem-halo {
+    position: absolute;
+    border-radius: 999px;
+    background: var(--emblem);
+    opacity: 0.3;
+    filter: blur(40px);
+    transition: opacity 0.5s ease;
+  }
+  .group:hover .emblem-halo {
+    opacity: 0.55;
+  }
+  .emblem-tile {
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: var(--emblem);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: color-mix(in oklab, var(--color-ink) 55%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 0 0 1px color-mix(in oklab, var(--emblem) 35%, transparent),
+      0 12px 30px -8px color-mix(in oklab, var(--emblem) 70%, transparent);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .emblem-tile > svg {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--emblem) 80%, transparent));
+  }
+  .group:hover .emblem-tile {
+    transform: scale(1.1) rotate(-6deg);
+  }
+  .emblem-badge {
+    position: absolute;
+    right: -0.5rem;
+    bottom: -0.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: color-mix(in oklab, var(--color-ink) 80%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Etiqueta chica en monoespaciada, arriba de los títulos. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Movimiento
+   --------------------------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -9px;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(8rem, 5rem) scale(1.15);
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 70%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer components {
+  .rise {
+    animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .draw {
+    transform-origin: left;
+    animation: draw 1s cubic-bezier(0.3, 0.8, 0.2, 1) both;
+  }
+  /* Mientras corre la pantalla de carga, el hero espera. */
+  html.loading .rise,
+  html.loading .draw {
+    animation-play-state: paused;
+  }
+
+  .pulse-dot {
+    animation: pulse-dot 1.8s ease-out infinite;
+  }
+
+  /* Tarjetas que flotan. El desfase (--i) evita que suban todas juntas.
+     Al pasar el mouse se frenan y se levantan un poco. */
+  .floaty {
+    animation: float 7s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * -1.7s);
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
+  }
+  .floaty:hover,
+  .floaty:focus-visible {
+    animation-play-state: paused;
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -28px color-mix(in oklab, var(--color-accent-2) 60%, transparent);
+  }
+
+  /* Revelado al scrollear. Solo se esconde si hay JS que lo vaya a mostrar. */
+  html.js [data-reveal] {
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      filter 0.9s ease;
+  }
+  html.js [data-reveal]:not(.is-in) {
+    opacity: 0;
+    transform: translateY(2rem);
+    filter: blur(8px);
+  }
+
+  /* Hijos que entran en cascada cuando su contenedor aparece. */
+  html.js [data-reveal-stagger] > * {
+    transition:
+      opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 90ms),
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 90ms),
+      filter 0.8s ease calc(var(--i, 0) * 90ms);
+  }
+  html.js [data-reveal-stagger]:not(.is-in) > * {
+    opacity: 0;
+    transform: translateY(1.75rem) scale(0.97);
+    filter: blur(6px);
+  }
+
+  /* Tarjetas de la grilla con filtro: entran cada vez que cambia el filtro. */
+  .card-in {
+    animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+  html.js [data-reveal]:not(.is-in) .card-in {
+    animation-play-state: paused;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Pantalla de carga
+   --------------------------------------------------------------------------- */
+@layer components {
+  .loader {
+    display: none;
+  }
+  html.loading .loader,
+  html.loader-out .loader {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background:
+      radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-accent-2) 14%, transparent), transparent 45%),
+      var(--color-ink-deep);
+  }
+  /* Red de seguridad: si el script fallara, igual se va sola. */
+  html.loading .loader {
+    animation: loader-failsafe 0.5s 7.5s forwards;
+  }
+
+  /* Las dos etapas (nombre y carga) ocupan el mismo lugar, en el centro. */
+  .loader > * {
+    grid-area: 1 / 1;
+  }
+  /* Etapa 1: el nombre solo. Entra desenfocado y con las letras abiertas. */
+  .loader-name {
+    opacity: 0;
+    animation: name-in 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s forwards;
+  }
+  html:not(.intro) .loader-name {
+    animation: name-out 0.5s ease forwards;
+  }
+  /* Etapa 2: la pantalla de carga, cuando el nombre ya se fue. */
+  .loader-main {
+    transition: opacity 0.5s ease 0.35s;
+  }
+  html.intro .loader-main {
+    opacity: 0;
+    transition: none;
+  }
+  html.loading {
+    overflow: hidden;
+  }
+  html.loader-out .loader {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.04);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease,
+      visibility 0s linear 0.7s;
+  }
+  .loader-ring {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 6.5rem;
+    height: 6.5rem;
+    border-radius: 999px;
+  }
+  .loader-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(from 0deg, transparent, var(--color-accent), var(--color-accent-2), transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: spin 1.1s linear infinite;
+  }
+  .loader-bar {
+    height: 3px;
+    width: 12rem;
+    border-radius: 999px;
+    background: var(--color-line);
+    overflow: hidden;
+  }
+  .loader-bar > span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    transform-origin: left;
+    transform: scaleX(var(--p, 0));
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+    box-shadow: 0 0 12px var(--color-accent);
+  }
+}
+
+@keyframes name-in {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    letter-spacing: 0.25em;
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    letter-spacing: -0.01em;
+  }
+}
+
+@keyframes name-out {
+  from {
+    opacity: 1;
+    letter-spacing: -0.01em;
+  }
+  to {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(1.04);
+    letter-spacing: -0.01em;
+  }
+}
+
+@keyframes loader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

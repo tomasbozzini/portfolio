@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  /** Una línea corta que explica la sección. Opcional. */
+  lead?: string;
+  /** Etiqueta chica arriba del título, por ejemplo "01 / Trabajo". */
+  eyebrow?: string;
+}
+
+const { title, lead, eyebrow } = Astro.props;
+---
+
+<div class="mb-10 lg:mb-12" data-reveal>
+  {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
+  <h2 class="spine-node font-display text-h2 text-text">{title}</h2>
+  {lead && <p class="measure mt-4 font-ui text-muted">{lead}</p>}
+</div>

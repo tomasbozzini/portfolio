@@ -1,0 +1,50 @@
+---
+/**
+ * Emblema simbólico de un proyecto: un ícono en una placa de vidrio que se
+ * superpone al centro de la portada. Los íconos viven en src/lib/emblems.ts;
+ * los estilos (.emblem-*) en global.css, porque también los usa la isla de React.
+ */
+import TechLogo from './TechLogo.astro';
+import { emblems, type Emblem, type EmblemKey } from '../lib/emblems';
+
+interface Props {
+  emblem?: EmblemKey;
+  /** 'lg' para la portada grande del detalle de un proyecto. */
+  size?: 'md' | 'lg';
+}
+
+const { emblem, size = 'md' } = Astro.props;
+const data: Emblem | undefined = emblem ? emblems[emblem] : undefined;
+const lg = size === 'lg';
+---
+
+{
+  data && (
+    <div
+      class="pointer-events-none absolute inset-0 grid place-items-center"
+      aria-hidden="true"
+      style={`--emblem:${data.color}`}
+    >
+      <div class:list={['emblem-halo', lg ? 'size-56' : 'size-28']} />
+
+      <div class:list={['emblem-tile', lg ? 'size-28 rounded-[1.75rem]' : 'size-16 rounded-2xl']}>
+        <svg
+          viewBox="0 0 24 24"
+          width={lg ? 54 : 30}
+          height={lg ? 54 : 30}
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          set:html={data.svg}
+        />
+        {data.badge && (
+          <span class:list={['emblem-badge', lg ? 'size-11' : 'size-7']}>
+            <TechLogo name={data.badge} size={lg ? 24 : 15} />
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}

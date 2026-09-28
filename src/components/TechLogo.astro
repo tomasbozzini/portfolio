@@ -1,0 +1,42 @@
+---
+import { techIcon, monogram } from '../lib/techIcons';
+
+interface Props {
+  name: string;
+  /** Lado del logo en px. */
+  size?: number;
+  class?: string;
+  /** Usa el color del texto en vez del color de la marca. */
+  mono?: boolean;
+}
+
+const { name, size = 16, class: className = '', mono = false } = Astro.props;
+const icon = techIcon(name);
+---
+
+{
+  icon ? (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill={mono ? 'currentColor' : icon.color}
+      aria-hidden="true"
+      focusable="false"
+      class:list={['shrink-0', className]}
+    >
+      <path d={icon.path} />
+    </svg>
+  ) : (
+    <span
+      aria-hidden="true"
+      class:list={[
+        'grid shrink-0 place-items-center rounded-md bg-gradient-to-br from-accent to-accent-2 font-mono font-bold leading-none text-ink-deep',
+        className,
+      ]}
+      style={`width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px`}
+    >
+      {monogram(name)}
+    </span>
+  )
+}

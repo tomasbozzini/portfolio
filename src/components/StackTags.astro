@@ -1,0 +1,29 @@
+---
+import TechLogo from './TechLogo.astro';
+
+interface Props {
+  items: readonly string[];
+  /** Cuántos mostrar antes de resumir el resto. 0 = todos. */
+  limit?: number;
+}
+
+const { items, limit = 0 } = Astro.props;
+const shown = limit > 0 ? items.slice(0, limit) : items;
+const rest = limit > 0 ? items.length - shown.length : 0;
+---
+
+<ul class="flex flex-wrap gap-1.5">
+  {
+    shown.map((item) => (
+      <li class="inline-flex items-center gap-1.5 rounded-full border border-line bg-ink/40 py-1 pr-2.5 pl-1.5 text-[0.72rem] leading-none text-muted">
+        <TechLogo name={item} size={12} />
+        {item}
+      </li>
+    ))
+  }
+  {
+    rest > 0 && (
+      <li class="rounded-full px-1.5 py-1 text-[0.72rem] leading-none text-muted">+{rest}</li>
+    )
+  }
+</ul>
