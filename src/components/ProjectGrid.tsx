@@ -131,7 +131,7 @@ export default function ProjectGrid({ projects, categories, lang, labels }: Prop
                       )
                     )}
                   </div>
-                  {project.emblem && <Emblem emblem={project.emblem} />}
+                  {project.emblem && !project.cover && <Emblem emblem={project.emblem} />}
                 </div>
 
                 <div className="flex flex-1 flex-col px-2 pt-3.5 pb-2.5">

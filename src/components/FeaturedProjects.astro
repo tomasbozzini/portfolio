@@ -36,7 +36,8 @@ const { projects } = Astro.props;
                 />
               </div>
             )}
-            <ProjectEmblem emblem={project.data.emblem} />
+            {/* Con imagen propia, el emblema no se muestra. */}
+            {!project.data.cover && <ProjectEmblem emblem={project.data.emblem} />}
           </div>
 
           <div class="flex flex-1 flex-col px-2.5 pt-4 pb-3 sm:py-3 sm:pr-3 sm:pl-3.5">

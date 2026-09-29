@@ -64,7 +64,7 @@ const hasLinks = Boolean(links.repo || links.demo);
           />
         )
       }
-      <ProjectEmblem emblem={emblem} size="lg" />
+      {!cover && <ProjectEmblem emblem={emblem} size="lg" />}
     </div>
 
     <div class="mt-14 grid gap-14 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">

@@ -8,6 +8,21 @@ import type { Category } from '../config/site';
 type ProjectEs = CollectionEntry<'proyectos'>;
 
 /**
+ * Portadas: basta con soltar una imagen en src/assets/proyectos/ con el slug del
+ * proyecto como nombre (por ejemplo merval-bot.png). Si existe, reemplaza al emblema.
+ */
+const covers = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/proyectos/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true },
+);
+function coverFor(slug: string): ImageMetadata | undefined {
+  const match = Object.entries(covers).find(([path]) =>
+    path.replace(/^.*\//, '').replace(/\.[^.]+$/, '') === slug,
+  );
+  return match?.[1].default;
+}
+
+/**
  * Un proyecto en un idioma. `data` es el frontmatter en español con título, resumen y
  * estado reemplazados por la traducción (si existe). `category` queda en español porque
  * es la clave del filtro y del patrón; para mostrarla, usar `categoryLabel`.
@@ -48,9 +63,10 @@ export async function getProjects(lang: Lang = 'es'): Promise<Project[]> {
     .sort((a, b) => a.data.order - b.data.order)
     .map((entry) => {
       const t = bySlug.get(entry.data.slug);
+      const base = { ...entry.data, cover: coverFor(entry.data.slug) ?? entry.data.cover };
       const data = t
         ? {
-            ...entry.data,
+            ...base,
             title: t.data.title,
             summary: t.data.summary,
             status: t.data.status,
@@ -59,7 +75,7 @@ export async function getProjects(lang: Lang = 'es'): Promise<Project[]> {
               alt: t.data.galleryAlt[i] ?? shot.alt,
             })),
           }
-        : entry.data;
+        : base;
       return {
         data,
         body: t ?? entry,
