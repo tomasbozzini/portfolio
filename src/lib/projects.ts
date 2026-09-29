@@ -48,6 +48,7 @@ export type ProjectCard = {
   featured: boolean;
   cover: { src: string; srcset: string } | null;
   emblem: ResolvedEmblem | null;
+  links: { repo?: string; demo?: string };
 };
 
 export const projectHref = (slug: string, lang: Lang = 'es') =>
@@ -124,6 +125,7 @@ export async function toCard(project: Project): Promise<ProjectCard> {
     featured: project.data.featured,
     cover: await optimizedCover(project),
     emblem: resolveEmblem(project),
+    links: project.data.links,
   };
 }
 

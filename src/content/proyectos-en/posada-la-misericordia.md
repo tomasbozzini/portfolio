@@ -11,4 +11,4 @@ summary: Website for a family-run rural lodge, built and maintained by me.
 
 ## Solution
 
-A static site built with Astro and deployed on Netlify. I built it and I'm still in charge of maintaining it.
+A static site built with Astro and deployed on Vercel. I built it and I'm still in charge of maintaining it.

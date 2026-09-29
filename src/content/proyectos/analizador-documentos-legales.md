@@ -10,6 +10,8 @@ stack:
   - Streamlit
   - Groq / LLaMA
   - PyMuPDF
+links:
+  repo: https://github.com/tomasbozzini/analizador-legal
 order: 1
 # TODO: completar el estado real del proyecto y descomentar esta línea.
 # status: En desarrollo

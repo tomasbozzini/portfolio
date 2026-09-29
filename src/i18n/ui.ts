@@ -72,6 +72,10 @@ type Dict = {
     inCategory: string;
     empty: string;
     screenshot: string;
+    /** Botón de la tarjeta que abre el sitio publicado. */
+    demo: string;
+    /** Nombre accesible del botón redondo de GitHub. */
+    repo: string;
   };
   services: Service[];
   askMe: string;
@@ -148,6 +152,8 @@ export const ui: Record<Lang, Dict> = {
       empty:
         'Todavía no hay nada publicado en esta categoría. Probá con otra o escribime si querés saber en qué estoy trabajando.',
       screenshot: 'Captura del proyecto',
+      demo: 'Live demo',
+      repo: 'Ver el código en GitHub',
     },
     services: [
       {
@@ -261,6 +267,8 @@ export const ui: Record<Lang, Dict> = {
       empty:
         "Nothing published in this category yet. Try another one, or message me if you'd like to know what I'm working on.",
       screenshot: 'Screenshot of',
+      demo: 'Live demo',
+      repo: 'View the code on GitHub',
     },
     services: [
       {

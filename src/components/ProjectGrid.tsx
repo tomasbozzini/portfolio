@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import type { ProjectCard } from '../lib/projects';
 import { patternSvg } from '../lib/pattern';
+import { githubPath } from '../lib/githubIcon';
 import type { ResolvedEmblem } from '../lib/emblems';
 import { localePath, type Lang, type ui } from '../i18n/ui';
 
@@ -43,6 +44,48 @@ function Emblem({ emblem }: { emblem: ResolvedEmblem }) {
           </span>
         )}
       </div>
+    </div>
+  );
+}
+
+/**
+ * "Live demo" y GitHub (círculo). Solo aparecen los que el proyecto tiene en `links`.
+ * Estilos en global.css (.card-demo, .card-repo).
+ */
+function CardLinks({
+  links,
+  title,
+  labels,
+}: {
+  links: ProjectCard['links'];
+  title: string;
+  labels: Props['labels'];
+}) {
+  if (!links.demo && !links.repo) return null;
+  return (
+    <div className="mt-4 flex items-center gap-2">
+      {links.demo && (
+        <a href={links.demo} target="_blank" rel="noopener noreferrer" className="card-demo">
+          {labels.demo}
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7M8 7h9v9" />
+          </svg>
+        </a>
+      )}
+      {links.repo && (
+        <a
+          href={links.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="card-repo"
+          aria-label={`${labels.repo}: ${title}`}
+          title="GitHub"
+        >
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+            <path d={githubPath} />
+          </svg>
+        </a>
+      )}
     </div>
   );
 }
@@ -103,10 +146,9 @@ export default function ProjectGrid({ projects, categories, lang, labels }: Prop
               className="card-in"
               style={{ '--i': index } as CSSProperties}
             >
-              <a
-                href={localePath(lang, `/proyectos/${project.slug}`)}
-                className="floaty glass glow-edge group flex h-full flex-col rounded-3xl p-2"
-              >
+              {/* La tarjeta no es un <a> porque adentro hay otros enlaces: el título
+                  estira su área clickeable a toda la tarjeta y los botones quedan encima. */}
+              <article className="floaty glass glow-edge group flex h-full flex-col rounded-3xl p-2">
                 <div className="relative aspect-16/10 overflow-hidden rounded-[1.1rem] bg-surface">
                   <div className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.06]">
                     {project.cover ? (
@@ -150,14 +192,21 @@ export default function ProjectGrid({ projects, categories, lang, labels }: Prop
                   </div>
 
                   <h3 className="mt-2 font-display text-[0.975rem] leading-tight text-text transition-colors group-hover:text-accent">
-                    {project.title}
+                    <a
+                      href={localePath(lang, `/proyectos/${project.slug}`)}
+                      className="after:absolute after:inset-0 after:rounded-3xl after:content-[''] focus-visible:outline-none"
+                    >
+                      {project.title}
+                    </a>
                   </h3>
 
-                  <p className="mt-2 line-clamp-3 text-[0.8125rem] leading-relaxed text-muted">
+                  <p className="mt-2 line-clamp-3 flex-1 text-[0.8125rem] leading-relaxed text-muted">
                     {project.summary}
                   </p>
+
+                  <CardLinks links={project.links} title={project.title} labels={labels} />
                 </div>
-              </a>
+              </article>
             </li>
           ))}
         </ul>

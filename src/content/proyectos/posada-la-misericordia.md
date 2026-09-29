@@ -8,7 +8,10 @@ status: Activo, lo mantengo yo
 summary: Sitio de un alojamiento rural familiar, construido y mantenido por mí.
 stack:
   - Astro
-  - Netlify
+  - Vercel
+links:
+  demo: https://posada-la-misericordia.vercel.app/
+  repo: https://github.com/tomasbozzini/PosadaLaMisericordia
 order: 5
 ---
 
@@ -18,6 +21,5 @@ order: 5
 
 ## Solución
 
-Sitio estático hecho con Astro y deployado en Netlify. Lo construí yo y sigo a cargo del mantenimiento.
+Sitio estático hecho con Astro y deployado en Vercel. Lo construí yo y sigo a cargo del mantenimiento.
 
-<!-- TODO: agregá la URL del sitio en el campo links.demo del frontmatter. -->

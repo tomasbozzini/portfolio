@@ -4,6 +4,7 @@ import { projectHref } from '../lib/projects';
 import ProjectCover from './ProjectCover.astro';
 import StackTags from './StackTags.astro';
 import ProjectEmblem from './ProjectEmblem.astro';
+import CardLinks from './CardLinks.astro';
 
 interface Props {
   projects: Project[];
@@ -17,10 +18,9 @@ const { projects } = Astro.props;
   {
     projects.map((project, index) => (
       <div>
-        <a
-          href={projectHref(project.data.slug, project.lang)}
-          class="floaty glass glow-edge group flex h-full flex-col gap-2 rounded-3xl p-2.5 sm:flex-row"
-        >
+        {/* La tarjeta no es un <a> porque adentro hay otros enlaces: el título
+            estira su área clickeable a toda la tarjeta y los botones quedan encima. */}
+        <article class="floaty glass glow-edge group flex h-full flex-col gap-2 rounded-3xl p-2.5 sm:flex-row">
           <div class="relative aspect-16/10 shrink-0 overflow-hidden rounded-[1.1rem] bg-surface sm:aspect-auto sm:min-h-56 sm:w-[42%]">
             {/* Con emblema y sin captura propia, el fondo va liso: solo el logo, sin el patrón generado. */}
             {(project.data.cover || !project.data.emblem) && (
@@ -53,18 +53,24 @@ const { projects } = Astro.props;
             </div>
 
             <h3 class="mt-3 font-display text-[1.125rem] leading-tight text-text transition-colors group-hover:text-accent">
-              {project.data.title}
+              <a
+                href={projectHref(project.data.slug, project.lang)}
+                class="after:absolute after:inset-0 after:rounded-3xl after:content-[''] focus-visible:outline-none"
+              >
+                {project.data.title}
+              </a>
             </h3>
 
             <p class="mt-2 line-clamp-3 flex-1 text-[0.875rem] leading-relaxed text-muted">
               {project.data.summary}
             </p>
 
-            <div class="mt-5">
+            <div class="mt-5 flex flex-wrap items-end justify-between gap-3">
               <StackTags items={project.data.stack} limit={3} />
+              <CardLinks links={project.data.links} title={project.data.title} />
             </div>
           </div>
-        </a>
+        </article>
       </div>
     ))
   }

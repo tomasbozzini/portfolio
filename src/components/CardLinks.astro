@@ -1,0 +1,45 @@
+---
+/**
+ * "Live demo" y GitHub (círculo) de una tarjeta. Solo aparecen los que el proyecto
+ * tiene en `links`. Mismo marcado que CardLinks en ProjectGrid.tsx; estilos en global.css.
+ */
+import { githubPath } from '../lib/githubIcon';
+import { getLang, ui } from '../i18n/ui';
+
+interface Props {
+  links: { repo?: string; demo?: string };
+  title: string;
+}
+
+const { links, title } = Astro.props;
+const t = ui[getLang(Astro.currentLocale)].grid;
+---
+
+{
+  (links.demo || links.repo) && (
+    <div class="flex shrink-0 items-center gap-2">
+      {links.demo && (
+        <a href={links.demo} target="_blank" rel="noopener noreferrer" class="card-demo">
+          {t.demo}
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7M8 7h9v9" />
+          </svg>
+        </a>
+      )}
+      {links.repo && (
+        <a
+          href={links.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-repo"
+          aria-label={`${t.repo}: ${title}`}
+          title="GitHub"
+        >
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+            <path d={githubPath} />
+          </svg>
+        </a>
+      )}
+    </div>
+  )
+}

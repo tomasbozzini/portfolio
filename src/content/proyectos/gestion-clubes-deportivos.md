@@ -13,6 +13,8 @@ stack:
   - SQLAlchemy
   - Supabase (PostgreSQL)
   - bcrypt
+links:
+  repo: https://github.com/tomasbozzini/SistemaGestionClubes
 order: 2
 # TODO: completar el estado real de uso y descomentar esta línea.
 # status: En producción

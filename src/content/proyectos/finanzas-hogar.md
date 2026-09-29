@@ -11,6 +11,9 @@ stack:
   - Astro
   - React
   - PocketBase
+links:
+  demo: https://gastos-casa-nine-nu.vercel.app/
+  repo: https://github.com/tomasbozzini/gastos-casa
 order: 8
 # TODO: confirmar el estado real y descomentar esta línea.
 # status: En uso

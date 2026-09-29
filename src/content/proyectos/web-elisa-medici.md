@@ -11,6 +11,9 @@ stack:
   - Astro (SSG)
   - React
   - Tailwind CSS
+links:
+  demo: https://landingpageagenciadeviajes.vercel.app/
+  repo: https://github.com/tomasbozzini/LandingPageAgenciaDeViajes
 order: 4
 # TODO: completar el estado real y descomentar esta línea.
 # status: Publicado
@@ -24,4 +27,3 @@ La agencia no tenía sitio propio ni identidad visual: no había logo, paleta ni
 
 Una landing page de una sola sección con scroll, que ordena paquetes, destinos y testimonios en un recorrido único. Las consultas no pasan por un formulario: cada bloque lleva a WhatsApp con un link directo. La identidad visual se creó desde cero para el proyecto.
 
-<!-- TODO: si el sitio está publicado, agregá la URL en el campo links.demo del frontmatter. -->
