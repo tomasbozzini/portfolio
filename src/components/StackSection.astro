@@ -1,5 +1,8 @@
 ---
 import { stackGroups } from '../config/site';
+import { getLang, ui } from '../i18n/ui';
+
+const t = ui[getLang(Astro.currentLocale)];
 import TechLogo from './TechLogo.astro';
 
 // Íconos de cada área (trazo, 24x24).
@@ -34,11 +37,11 @@ const areaIcons: Record<string, string> = {
           </span>
           <div>
             <span class="eyebrow">0{index + 1}</span>
-            <h3 class="font-display text-h3 text-text">{group.area}</h3>
+            <h3 class="font-display text-h3 text-text">{t.stack[index].area}</h3>
           </div>
         </div>
 
-        <p class="mt-4 text-sm leading-relaxed text-muted">{group.description}</p>
+        <p class="mt-4 text-sm leading-relaxed text-muted">{t.stack[index].description}</p>
 
         <ul class="mt-6 grid grid-cols-2 gap-2.5">
           {group.items.map((item) => (

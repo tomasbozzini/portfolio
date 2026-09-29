@@ -1,5 +1,6 @@
 ---
-import { contact, whatsappLink, generalMessage } from '../config/site';
+import { contact, whatsappLink } from '../config/site';
+import { getLang, ui } from '../i18n/ui';
 import TechLogo from './TechLogo.astro';
 
 type Row = { label: string; value: string; href: string; external: boolean; icon?: string };
@@ -8,7 +9,7 @@ const rows: Row[] = [
   {
     label: 'WhatsApp',
     value: contact.whatsappDisplay,
-    href: whatsappLink(generalMessage),
+    href: whatsappLink(ui[getLang(Astro.currentLocale)].generalMessage),
     external: true,
   },
   {

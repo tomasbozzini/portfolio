@@ -2,14 +2,31 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { emblems, type Emblem, type ResolvedEmblem } from './emblems';
 import { techIcon } from './techIcons';
+import { localePath, ui, type Lang } from '../i18n/ui';
+import type { Category } from '../config/site';
 
-export type Project = CollectionEntry<'proyectos'>;
+type ProjectEs = CollectionEntry<'proyectos'>;
+
+/**
+ * Un proyecto en un idioma. `data` es el frontmatter en español con título, resumen y
+ * estado reemplazados por la traducción (si existe). `category` queda en español porque
+ * es la clave del filtro y del patrón; para mostrarla, usar `categoryLabel`.
+ */
+export type Project = {
+  data: ProjectEs['data'];
+  /** Entrada a pasarle a render(): la traducción si existe, si no la original. */
+  body: ProjectEs | CollectionEntry<'proyectosEn'>;
+  lang: Lang;
+  translated: boolean;
+  categoryLabel: string;
+};
 
 /** Lo mínimo que necesita una tarjeta. Serializable, para poder cruzar a la isla de React. */
 export type ProjectCard = {
   slug: string;
   title: string;
   category: string;
+  categoryLabel: string;
   status?: string;
   summary: string;
   stack: string[];
@@ -18,12 +35,39 @@ export type ProjectCard = {
   emblem: ResolvedEmblem | null;
 };
 
-export const projectHref = (slug: string) => `/proyectos/${slug}`;
+export const projectHref = (slug: string, lang: Lang = 'es') =>
+  localePath(lang, `/proyectos/${slug}`);
 
-/** Todos los proyectos, ordenados por el campo `order`. */
-export async function getProjects(): Promise<Project[]> {
+/** Todos los proyectos en un idioma, ordenados por el campo `order`. */
+export async function getProjects(lang: Lang = 'es'): Promise<Project[]> {
   const all = await getCollection('proyectos');
-  return all.sort((a, b) => a.data.order - b.data.order);
+  const translations = lang === 'en' ? await getCollection('proyectosEn') : [];
+  const bySlug = new Map(translations.map((entry) => [entry.data.slug, entry]));
+
+  return all
+    .sort((a, b) => a.data.order - b.data.order)
+    .map((entry) => {
+      const t = bySlug.get(entry.data.slug);
+      const data = t
+        ? {
+            ...entry.data,
+            title: t.data.title,
+            summary: t.data.summary,
+            status: t.data.status,
+            gallery: entry.data.gallery.map((shot, i) => ({
+              ...shot,
+              alt: t.data.galleryAlt[i] ?? shot.alt,
+            })),
+          }
+        : entry.data;
+      return {
+        data,
+        body: t ?? entry,
+        lang,
+        translated: lang === 'es' || Boolean(t),
+        categoryLabel: ui[lang].categories[entry.data.category as Category],
+      };
+    });
 }
 
 /**
@@ -57,6 +101,7 @@ export async function toCard(project: Project): Promise<ProjectCard> {
     slug: project.data.slug,
     title: project.data.title,
     category: project.data.category,
+    categoryLabel: project.categoryLabel,
     status: project.data.status,
     summary: project.data.summary,
     stack: project.data.stack,
@@ -66,7 +111,7 @@ export async function toCard(project: Project): Promise<ProjectCard> {
   };
 }
 
-export async function getProjectCards(): Promise<ProjectCard[]> {
-  const projects = await getProjects();
+export async function getProjectCards(lang: Lang = 'es'): Promise<ProjectCard[]> {
+  const projects = await getProjects(lang);
   return Promise.all(projects.map(toCard));
 }

@@ -1,0 +1,67 @@
+---
+/**
+ * La home completa. La usan src/pages/index.astro (español) y src/pages/en/index.astro.
+ * El idioma sale de la URL (Astro.currentLocale).
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import FeaturedProjects from '../components/FeaturedProjects.astro';
+import ProjectGrid from '../components/ProjectGrid';
+import Services from '../components/Services.astro';
+import About from '../components/About.astro';
+import StackSection from '../components/StackSection.astro';
+import Contact from '../components/Contact.astro';
+import { getProjects, toCard } from '../lib/projects';
+import { categories } from '../config/site';
+import { getLang, ui } from '../i18n/ui';
+
+const lang = getLang(Astro.currentLocale);
+const t = ui[lang];
+const s = t.sections;
+
+const projects = await getProjects(lang);
+const featured = projects.filter((project) => project.data.featured);
+const cards = await Promise.all(projects.map(toCard));
+const filters = categories.map((key) => ({ key, label: t.categories[key] }));
+---
+
+<Base>
+  <Hero />
+
+  <div class="shell">
+    <div class="spine">
+      <section id="proyectos" class="py-16 lg:py-20">
+        <SectionHeading eyebrow={s.featured[0]} title={s.featured[1]} />
+        <FeaturedProjects projects={featured} />
+      </section>
+
+      <section id="todos" class="py-16 lg:py-20">
+        <SectionHeading eyebrow={s.all[0]} title={s.all[1]} />
+        <div data-reveal>
+          <ProjectGrid projects={cards} categories={filters} lang={lang} labels={t.grid} client:visible />
+        </div>
+      </section>
+
+      <section id="servicios" class="py-16 lg:py-20">
+        <SectionHeading eyebrow={s.services[0]} title={s.services[1]} lead={s.services[2]} />
+        <Services />
+      </section>
+
+      <section id="sobre-mi" class="py-16 lg:py-20">
+        <SectionHeading eyebrow={s.about[0]} title={s.about[1]} />
+        <About />
+      </section>
+
+      <section id="stack" class="py-16 lg:py-20">
+        <SectionHeading eyebrow={s.stack[0]} title={s.stack[1]} lead={s.stack[2]} />
+        <StackSection />
+      </section>
+
+      <section id="contacto" class="py-16 lg:py-20">
+        <SectionHeading eyebrow={s.contact[0]} title={s.contact[1]} lead={s.contact[2]} />
+        <Contact />
+      </section>
+    </div>
+  </div>
+</Base>

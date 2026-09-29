@@ -2,13 +2,17 @@ import { useState, type CSSProperties } from 'react';
 import type { ProjectCard } from '../lib/projects';
 import { patternSvg } from '../lib/pattern';
 import type { ResolvedEmblem } from '../lib/emblems';
+import { localePath, type Lang, type ui } from '../i18n/ui';
 
 type Props = {
   projects: ProjectCard[];
-  categories: readonly string[];
+  /** `key` es la categoría en español (la del frontmatter); `label`, lo que se muestra. */
+  categories: { key: string; label: string }[];
+  lang: Lang;
+  labels: (typeof ui)[Lang]['grid'];
 };
 
-const ALL = 'Todos';
+const ALL = '__all__';
 
 /** Mismo emblema que ProjectEmblem.astro, en tamaño de tarjeta. Estilos en global.css. */
 function Emblem({ emblem }: { emblem: ResolvedEmblem }) {
@@ -43,10 +47,11 @@ function Emblem({ emblem }: { emblem: ResolvedEmblem }) {
   );
 }
 
-export default function ProjectGrid({ projects, categories }: Props) {
+export default function ProjectGrid({ projects, categories, lang, labels }: Props) {
   const [active, setActive] = useState<string>(ALL);
 
-  const filters = [ALL, ...categories];
+  const filters = [{ key: ALL, label: labels.all }, ...categories];
+  const activeLabel = filters.find((f) => f.key === active)?.label ?? '';
   const visible =
     active === ALL ? projects : projects.filter((p) => p.category === active);
 
@@ -54,17 +59,17 @@ export default function ProjectGrid({ projects, categories }: Props) {
     <div>
       <div
         role="group"
-        aria-label="Filtrar proyectos por categoría"
+        aria-label={labels.filterLabel}
         className="glass inline-flex max-w-full flex-wrap gap-1 rounded-3xl p-1.5 sm:rounded-full"
       >
         {filters.map((filter) => {
-          const isActive = filter === active;
+          const isActive = filter.key === active;
           return (
             <button
-              key={filter}
+              key={filter.key}
               type="button"
               aria-pressed={isActive}
-              onClick={() => setActive(filter)}
+              onClick={() => setActive(filter.key)}
               className={
                 'rounded-full px-4 py-2 font-ui text-sm transition-all duration-300 ' +
                 (isActive
@@ -72,21 +77,20 @@ export default function ProjectGrid({ projects, categories }: Props) {
                   : 'text-muted hover:bg-surface-2 hover:text-text')
               }
             >
-              {filter}
+              {filter.label}
             </button>
           );
         })}
       </div>
 
       <p aria-live="polite" className="mt-4 font-mono text-[0.72rem] tracking-wider text-muted">
-        {visible.length === 1 ? '1 proyecto' : `${visible.length} proyectos`}
-        {active !== ALL ? ` en ${active}` : ''}
+        {visible.length} {visible.length === 1 ? labels.one : labels.many}
+        {active !== ALL ? ` ${labels.inCategory} ${activeLabel}` : ''}
       </p>
 
       {visible.length === 0 ? (
         <p className="measure mt-10 font-body text-muted">
-          Todavía no hay nada publicado en esta categoría. Probá con otra o escribime si
-          querés saber en qué estoy trabajando.
+          {labels.empty}
         </p>
       ) : (
         <ul
@@ -100,7 +104,7 @@ export default function ProjectGrid({ projects, categories }: Props) {
               style={{ '--i': index } as CSSProperties}
             >
               <a
-                href={`/proyectos/${project.slug}`}
+                href={localePath(lang, `/proyectos/${project.slug}`)}
                 className="floaty glass glow-edge group flex h-full flex-col rounded-3xl p-2"
               >
                 <div className="relative aspect-16/10 overflow-hidden rounded-[1.1rem] bg-surface">
@@ -110,7 +114,7 @@ export default function ProjectGrid({ projects, categories }: Props) {
                         src={project.cover.src}
                         srcSet={project.cover.srcset}
                         sizes="(min-width: 1280px) 16rem, (min-width: 640px) 45vw, 100vw"
-                        alt={`Captura del proyecto ${project.title}`}
+                        alt={`${labels.screenshot} ${project.title}`}
                         loading="lazy"
                         decoding="async"
                         className="h-full w-full object-cover"
@@ -133,7 +137,7 @@ export default function ProjectGrid({ projects, categories }: Props) {
                 <div className="flex flex-1 flex-col px-2 pt-3.5 pb-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono text-[0.68rem] tracking-wider text-muted uppercase">
-                      {project.category}
+                      {project.categoryLabel}
                     </span>
                     {project.status && (
                       <span

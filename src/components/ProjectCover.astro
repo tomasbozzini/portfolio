@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { patternSvg } from '../lib/pattern';
+import { getLang, ui } from '../i18n/ui';
 
 interface Props {
   cover?: ImageMetadata;
@@ -23,13 +24,14 @@ const {
   eager = false,
   instance = 'a',
 } = Astro.props;
+const screenshot = ui[getLang(Astro.currentLocale)].grid.screenshot;
 ---
 
 {
   cover ? (
     <Image
       src={cover}
-      alt={`Captura del proyecto ${title}`}
+      alt={`${screenshot} ${title}`}
       widths={[480, 800, 1200]}
       sizes={sizes}
       loading={eager ? 'eager' : 'lazy'}

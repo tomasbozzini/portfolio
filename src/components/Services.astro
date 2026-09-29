@@ -1,7 +1,11 @@
 ---
-import { services, whatsappLink } from '../config/site';
+import { whatsappLink } from '../config/site';
+import { getLang, ui } from '../i18n/ui';
 
-// Un ícono por servicio, en el mismo orden que en src/config/site.ts.
+const t = ui[getLang(Astro.currentLocale)];
+const services = t.services;
+
+// Un ícono por servicio, en el mismo orden que en src/i18n/ui.ts.
 const icons = [
   '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/>',
   '<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><path d="M16.5 13.5v6M13.5 16.5h6"/>',
@@ -41,7 +45,7 @@ const icons = [
             rel="noopener noreferrer"
             class="btn-ghost mt-6 self-start !px-4 !py-2"
           >
-            Consultame
+            {t.askMe}
             <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg>
           </a>
         </article>

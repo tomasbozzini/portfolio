@@ -13,6 +13,13 @@ export default defineConfig({
   site: SITE,
   trailingSlash: 'never',
 
+  // Español en la raíz (/), inglés bajo /en.
+  i18n: {
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
+    routing: { prefixDefaultLocale: false },
+  },
+
   fonts: [
     {
       // Archivo variable, subconjunto latino, con los dos ejes: peso y ancho.
@@ -38,5 +45,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      i18n: { defaultLocale: 'es', locales: { es: 'es-AR', en: 'en' } },
+    }),
+  ],
 });

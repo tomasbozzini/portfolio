@@ -28,7 +28,7 @@ export const emblems = {
   },
   // Globo de chat con un brote adentro: mensajes del campo.
   'agro-chat': {
-    color: 'var(--color-accent-2)',
+    color: 'var(--color-cafe)',
     svg: '<path d="M4.5 19.5 5.6 16A8.3 8.3 0 1 1 8.4 18.6Z"/><path d="M12 15.5v-4.2"/><path d="M12 11.3c0-2 1.5-3.6 3.5-3.6 0 2-1.5 3.6-3.5 3.6Z"/><path d="M12 12.8c0-1.7-1.3-3-3-3 0 1.7 1.3 3 3 3Z"/>',
     badge: 'WhatsApp',
   },
@@ -39,7 +39,7 @@ export const emblems = {
   },
   // Billetera: finanzas del hogar.
   finance: {
-    color: 'var(--color-accent-2)',
+    color: 'var(--color-cafe)',
     svg: '<rect x="2.5" y="6" width="19" height="13" rx="2.5"/><path d="M5 6 15.5 3.2a1.5 1.5 0 0 1 1.9 1.1L17.8 6"/><path d="M21.5 11h-4a1.75 1.75 0 0 0 0 3.5h4"/><circle cx="17.6" cy="12.75" r=".4"/>',
   },
   // Velas de un gráfico de bolsa.
@@ -54,7 +54,7 @@ export const emblems = {
   },
   // Casa de campo con un árbol: alojamiento rural.
   lodge: {
-    color: 'var(--color-accent)',
+    color: 'var(--color-cafe)',
     svg: '<path d="M2.5 11 10.5 4.5l8 6.5"/><path d="M4.5 9.5V20h12V9.5"/><path d="M9 20v-5h3v5"/><path d="M20.5 20v-3.5M20.5 16.5c-1.2 0-2-1-2-2.2 0-1.5 1-3.3 2-3.3s2 1.8 2 3.3c0 1.2-.8 2.2-2 2.2Z"/>',
   },
   // Robot.

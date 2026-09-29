@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { Font } from 'astro:assets';
 import { site } from '../config/site';
+import { getLang, languages, switchLangPath, ui, type Lang } from '../i18n/ui';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -12,24 +13,33 @@ interface Props {
   ogType?: 'website' | 'article';
 }
 
-const { title, description = site.description, ogType = 'website' } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = ui[lang];
+const { title, description = t.description, ogType = 'website' } = Astro.props;
 
-const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${t.role}`;
+// La misma página en cada idioma, para los buscadores.
+const alternates = (Object.keys(languages) as Lang[]).map((code) => ({
+  code,
+  href: new URL(switchLangPath(Astro.url.pathname, code), Astro.site).href,
+}));
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="es-AR">
+<html lang={t.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.code} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0b0a09" />
+    <meta name="theme-color" content="#0c0a08" />
     <meta name="author" content={site.name} />
 
     <meta property="og:type" content={ogType} />
@@ -37,11 +47,11 @@ const ogImage = new URL('/og.png', Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale" content={t.ogLocale} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
+    <meta property="og:image:alt" content={`${site.name} — ${t.role}`} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
@@ -127,7 +137,7 @@ const ogImage = new URL('/og.png', Astro.site).href;
         </div>
         <div class="loader-bar"><span id="loader-bar"></span></div>
         <p class="font-mono text-[0.7rem] tracking-[0.25em] text-muted uppercase">
-          Iniciando sistema · <span id="loader-num" class="text-accent">000</span>%
+          {t.loader} · <span id="loader-num" class="text-accent">000</span>%
         </p>
       </div>
     </div>
@@ -142,7 +152,7 @@ const ogImage = new URL('/og.png', Astro.site).href;
       href="#contenido"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:font-ui focus:text-sm focus:text-ink-deep"
     >
-      Ir al contenido
+      {t.skip}
     </a>
 
     <Header />

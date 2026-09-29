@@ -1,9 +1,9 @@
 ---
-import ProjectDetail from '../../views/ProjectDetail.astro';
-import { getProjects } from '../../lib/projects';
+import ProjectDetail from '../../../views/ProjectDetail.astro';
+import { getProjects } from '../../../lib/projects';
 
 export async function getStaticPaths() {
-  const projects = await getProjects('es');
+  const projects = await getProjects('en');
 
   return projects.map((project, index) => ({
     params: { slug: project.data.slug },

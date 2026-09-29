@@ -45,4 +45,22 @@ const proyectos = defineCollection({
     }),
 });
 
-export const collections = { proyectos };
+/**
+ * Traducción al inglés de cada proyecto, en src/content/proyectos-en/<slug>.md.
+ * Solo lleva lo que se traduce; el resto (stack, portada, enlaces, orden) sale del
+ * archivo en español. Si un proyecto no tiene traducción, se muestra en español.
+ */
+const proyectosEn = defineCollection({
+  loader: glob({ base: './src/content/proyectos-en', pattern: '**/*.md' }),
+  schema: z.object({
+    /** Tiene que coincidir con el slug del archivo en español. */
+    slug: z.string(),
+    title: z.string(),
+    summary: z.string(),
+    status: z.string().optional(),
+    /** Textos alternativos de la galería, en el mismo orden que en español. */
+    galleryAlt: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { proyectos, proyectosEn };

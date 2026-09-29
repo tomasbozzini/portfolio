@@ -1,16 +1,10 @@
 /**
- * Único lugar donde viven los datos del sitio.
- * Si cambia un contacto, un servicio o un texto fijo, se cambia acá.
+ * Datos del sitio que no dependen del idioma: nombre, contacto, categorías, stack.
+ * Los textos (en español y en inglés) viven en src/i18n/ui.ts.
  */
 
 export const site = {
   name: 'Tomás Bozzini',
-  role: 'Estudiante avanzado de Ingeniería en Sistemas · Desarrollo de software a medida, web e IA aplicada',
-  /** Se usa en <title> y en las metas sociales. */
-  tagline: 'Construyo sistemas completos: web, datos e integración con IA.',
-  description:
-    'Portfolio de Tomás Bozzini, estudiante de último año de Ingeniería en Sistemas en la UNICEN (Tandil). Sistemas de gestión, webs a medida y automatización con IA.',
-  locale: 'es-AR',
   location: 'Tandil, Buenos Aires, Argentina',
 } as const;
 
@@ -37,16 +31,9 @@ export function whatsappLink(message: string): string {
 
 export const mailtoLink = `mailto:${contact.email}`;
 
-export const nav = [
-  { label: 'Proyectos', href: '/#proyectos' },
-  { label: 'Servicios', href: '/#servicios' },
-  { label: 'Sobre mí', href: '/#sobre-mi' },
-  { label: 'Contacto', href: '/#contacto' },
-] as const;
-
 /* --------------------------------------------------------------------------
    Categorías de proyecto. El orden es el del filtro en la home.
-   Agregar una acá y en el enum de src/content.config.ts.
+   Para sumar una: agregarla acá y su nombre en inglés en src/i18n/ui.ts.
    -------------------------------------------------------------------------- */
 export const categories = [
   'Sistemas',
@@ -59,56 +46,19 @@ export const categories = [
 export type Category = (typeof categories)[number];
 
 /* --------------------------------------------------------------------------
-   Servicios
-   -------------------------------------------------------------------------- */
-export const services = [
-  {
-    title: 'Webs a medida',
-    description:
-      'Landing pages, catálogos y sitios institucionales para negocios, con botón de WhatsApp y diseño propio.',
-    message:
-      'Hola Tomás, te escribo desde tu portfolio. Me interesa una web a medida para mi negocio.',
-  },
-  {
-    title: 'Sistemas de gestión a medida',
-    description:
-      'Aplicaciones web o de escritorio para digitalizar procesos: reservas, cuotas, legajos, stock.',
-    message:
-      'Hola Tomás, te escribo desde tu portfolio. Necesito un sistema de gestión a medida.',
-  },
-  {
-    title: 'Automatización e IA',
-    description:
-      'Bots de WhatsApp, flujos automáticos y análisis de documentos con modelos de lenguaje.',
-    message:
-      'Hola Tomás, te escribo desde tu portfolio. Quiero automatizar un proceso con IA.',
-  },
-] as const;
-
-/** Mensaje del botón general de contacto. */
-export const generalMessage =
-  'Hola Tomás, te escribo desde tu portfolio. Quería hacerte una consulta.';
-
-/* --------------------------------------------------------------------------
-   Stack, agrupado por área
+   Stack, agrupado por área. Los nombres y descripciones de cada área, en ui.ts (mismo orden).
    -------------------------------------------------------------------------- */
 export const stackGroups = [
   {
-    area: 'Frontend',
     icon: 'frontend',
-    description: 'Interfaces rápidas, accesibles y con diseño propio.',
     items: ['JavaScript', 'React', 'Astro', 'Tailwind CSS'],
   },
   {
-    area: 'Backend y datos',
     icon: 'backend',
-    description: 'Lógica, bases de datos y APIs que sostienen el sistema.',
     items: ['Python', 'PostgreSQL', 'Supabase', 'Neon', 'PocketBase'],
   },
   {
-    area: 'IA y automatización',
     icon: 'ai',
-    description: 'Modelos de lenguaje y flujos que trabajan solos.',
     items: ['Claude (Anthropic)', 'Groq', 'Gemini', 'Make', 'n8n'],
   },
 ] as const;

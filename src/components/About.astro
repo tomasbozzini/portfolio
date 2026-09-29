@@ -8,12 +8,10 @@
   import foto from '../assets/foto.jpg';
 */
 
-const facts = [
-  { label: 'Carrera', value: 'Ing. en Sistemas · UNICEN' },
-  { label: 'Base', value: 'Tandil, Buenos Aires' },
-  { label: 'Busco', value: 'Part-time remoto/híbrido y freelance' },
-  { label: 'Inglés', value: 'Certificaciones de Cambridge' },
-];
+import { getLang, ui } from '../i18n/ui';
+
+const t = ui[getLang(Astro.currentLocale)];
+const { paragraphs, facts } = t.about;
 ---
 
 <div class="glass rounded-3xl p-6 sm:p-8 lg:p-10" data-reveal>
@@ -31,16 +29,7 @@ const facts = [
     */}
 
     <div class="measure flex-1 text-[1.0625rem] leading-relaxed text-muted">
-      <p>
-        Estoy terminando Ingeniería en Sistemas en la UNICEN, en Tandil. Construyo sistemas
-        completos de punta a punta: la interfaz web, los datos y la integración con IA.
-        Trabajo tanto en proyectos propios como para clientes, y me interesa especialmente
-        resolver problemas concretos de un negocio con la tecnología justa.
-      </p>
-      <p class="mt-4">
-        Busco un part-time remoto o híbrido y proyectos freelance. Tengo certificaciones de
-        inglés de Cambridge.
-      </p>
+      {paragraphs.map((text, index) => <p class:list={[index > 0 && 'mt-4']}>{text}</p>)}
     </div>
 
     <dl class="grid gap-3 sm:grid-cols-2 lg:w-80 lg:grid-cols-1">

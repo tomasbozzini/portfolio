@@ -1,5 +1,9 @@
 ---
 import { site } from '../config/site';
+import { getLang, ui } from '../i18n/ui';
+
+const lang = getLang(Astro.currentLocale);
+const t = ui[lang];
 ---
 
 <section class="shell relative pt-20 pb-20 sm:pt-28 lg:pt-36 lg:pb-28">
@@ -8,7 +12,7 @@ import { site } from '../config/site';
     style="animation-delay: 0ms"
   >
     <span class="pulse-dot size-2 rounded-full bg-accent"></span>
-    Disponible para proyectos · {site.location.split(',')[0]}
+    {t.hero.available} · {site.location.split(',')[0]}
   </p>
 
   <h1
@@ -19,7 +23,7 @@ import { site } from '../config/site';
   </h1>
 
   <div
-    class="draw mt-7 h-[2px] w-full max-w-[34rem] rounded-full bg-gradient-to-r from-accent via-accent-2 to-transparent"
+    class="draw mt-7 h-[2px] w-full max-w-[34rem] rounded-full bg-gradient-to-r from-accent via-cafe to-transparent"
     style="animation-delay: 260ms"
     aria-hidden="true"
   >
@@ -29,7 +33,7 @@ import { site } from '../config/site';
     class="rise measure mt-6 font-ui text-lg text-muted sm:text-xl"
     style="animation-delay: 380ms"
   >
-    {site.role}
+    {t.role}
   </p>
 
   <div
@@ -37,11 +41,11 @@ import { site } from '../config/site';
     style="animation-delay: 500ms"
   >
     <a href="#proyectos" class="btn-primary">
-      Ver proyectos
+      {t.hero.seeProjects}
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg>
     </a>
 
-    <a href="#contacto" class="btn-ghost">Contactame</a>
+    <a href="#contacto" class="btn-ghost">{t.hero.contact}</a>
   </div>
 
   <!-- Órbitas decorativas -->

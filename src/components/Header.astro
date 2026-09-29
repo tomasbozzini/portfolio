@@ -1,37 +1,45 @@
 ---
-import { site, nav, contact, whatsappLink, generalMessage } from '../config/site';
+import { site, contact, whatsappLink } from '../config/site';
+import { cv, getLang, languages, localePath, switchLangPath, ui, type Lang } from '../i18n/ui';
 import TechLogo from './TechLogo.astro';
+
+const lang = getLang(Astro.currentLocale);
+const t = ui[lang];
 
 // Botones de redes. LinkedIn solo aparece si está cargado en src/config/site.ts.
 const socials = [
   { label: 'GitHub', href: contact.github },
   ...(contact.linkedin ? [{ label: 'LinkedIn', href: contact.linkedin }] : []),
 ];
+
+// El CV del idioma actual va primero en el menú.
+const cvs = lang === 'en' ? [cv.en, cv.es] : [cv.es, cv.en];
+const langs = Object.keys(languages) as Lang[];
 ---
 
 <header class="sticky top-3 z-40 sm:top-4">
   <div class="shell">
     <div
-      class="glass flex h-14 items-center justify-between gap-6 rounded-full pr-2 pl-5"
+      class="glass flex h-14 items-center justify-between gap-3 rounded-full pr-2 pl-5 sm:gap-6"
     >
       <a
-        href="/"
-        aria-label={`${site.name}, inicio`}
-        class="flex items-center gap-2.5 font-display text-[0.9375rem] font-semibold tracking-tight text-text transition-colors hover:text-accent"
+        href={localePath(lang, '/')}
+        aria-label={`${site.name}, ${t.header.home}`}
+        class="flex shrink-0 items-center gap-2.5 font-display text-[0.9375rem] font-semibold tracking-tight text-text transition-colors hover:text-accent"
       >
         <span
-          class="grid size-7 place-items-center rounded-full bg-gradient-to-br from-accent to-accent-2 text-[0.65rem] font-bold text-ink-deep"
+          class="grid size-7 place-items-center rounded-full bg-gradient-to-br from-accent to-cafe text-[0.65rem] font-bold text-ink-deep"
           aria-hidden="true">TB</span
         >
-        <span class="hidden sm:inline">{site.name}</span>
+        <span class="hidden xl:inline">{site.name}</span>
       </a>
 
-      <nav aria-label="Secciones" class="hidden items-center gap-1 md:flex">
+      <nav aria-label={t.header.sections} class="hidden items-center gap-1 lg:flex">
         {
-          nav.map((item) => (
+          t.nav.map((item) => (
             <a
-              href={item.href}
-              class="rounded-full px-4 py-2 font-ui text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text"
+              href={localePath(lang, item.href)}
+              class="rounded-full px-3.5 py-2 font-ui text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text"
             >
               {item.label}
             </a>
@@ -40,30 +48,128 @@ const socials = [
       </nav>
 
       <div class="flex items-center gap-1.5">
+        <!-- Selector de idioma: lleva a la misma página en el otro idioma. -->
+        <div
+          role="group"
+          aria-label={t.header.language}
+          class="flex items-center rounded-full border border-line bg-surface/60 p-0.5 font-mono text-[0.68rem] tracking-wider"
+        >
+          {
+            langs.map((code) => (
+              <a
+                href={switchLangPath(Astro.url.pathname, code)}
+                hreflang={code}
+                lang={code}
+                aria-current={code === lang ? 'true' : undefined}
+                title={languages[code]}
+                class:list={[
+                  'rounded-full px-2 py-1.5 uppercase transition-colors',
+                  code === lang ? 'bg-cafe/25 text-text' : 'text-muted hover:text-text',
+                ]}
+              >
+                {code}
+              </a>
+            ))
+          }
+        </div>
+
         {
           socials.map((social) => (
             <a
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${social.label} (se abre en otra pestaña)`}
+              aria-label={`${social.label} (${t.header.newTab})`}
               title={social.label}
-              class="grid size-9 place-items-center rounded-full border border-line bg-surface/60 text-text transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_18px_-4px_var(--color-accent)]"
+              class="hidden size-9 place-items-center rounded-full border border-line bg-surface/60 text-text transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_18px_-4px_var(--color-accent)] sm:grid"
             >
               <TechLogo name={social.label} size={16} mono />
             </a>
           ))
         }
 
+        <!-- Ver CV: menú con las dos versiones. Funciona sin JS gracias a <details>. -->
+        <details class="cv-menu relative" data-cv-menu>
+          <summary
+            class="btn-ghost !gap-1.5 !px-3.5 !py-2 !text-[0.8125rem] cursor-pointer list-none"
+            aria-label={`${t.header.cv}: ${t.header.cvMenu}`}
+          >
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 1.75H4.25a1.5 1.5 0 0 0-1.5 1.5v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5V5.5Z"/><path d="M9.5 1.75V5.5h3.75M5.5 8.5h5M5.5 11h3.5"/></svg>
+            {t.header.cv}
+            <svg class="cv-caret" viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+          </summary>
+
+          <div class="glass absolute top-[calc(100%+0.6rem)] right-0 w-56 rounded-2xl p-1.5">
+            <p class="px-3 pt-2 pb-1.5 font-mono text-[0.65rem] tracking-[0.14em] text-muted uppercase">
+              {t.header.cvMenu}
+            </p>
+            <ul>
+              {
+                cvs.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      hreflang={item === cv.en ? 'en' : 'es'}
+                      class="group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm text-text transition-colors hover:bg-cafe/15"
+                    >
+                      <span class="flex items-center gap-2.5">
+                        <span class="grid size-7 place-items-center rounded-lg bg-cafe/20 font-mono text-[0.62rem] font-semibold text-accent-2 uppercase ring-1 ring-cafe/30">
+                          {item === cv.en ? 'en' : 'es'}
+                        </span>
+                        CV · {item.label}
+                      </span>
+                      <svg class="text-muted transition-colors group-hover:text-accent" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </details>
+
         <a
-          href={whatsappLink(generalMessage)}
+          href={whatsappLink(t.generalMessage)}
           target="_blank"
           rel="noopener noreferrer"
-          class="btn-primary ml-1 !px-4 !py-2 !text-[0.8125rem]"
+          class="btn-primary ml-0.5 !px-4 !py-2 !text-[0.8125rem]"
         >
-          Escribime
+          {t.header.contact}
         </a>
       </div>
     </div>
   </div>
 </header>
+
+<style>
+  .cv-menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .cv-caret {
+    transition: transform 0.25s ease;
+  }
+  .cv-menu[open] .cv-caret {
+    transform: rotate(180deg);
+  }
+  .cv-menu[open] > summary {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+</style>
+
+<script>
+  // Cierra el menú del CV al hacer clic afuera o con Escape.
+  const menu = document.querySelector<HTMLDetailsElement>('[data-cv-menu]');
+  if (menu) {
+    document.addEventListener('click', (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+  }
+</script>

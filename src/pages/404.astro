@@ -1,30 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
+import { ui } from '../i18n/ui';
+
+// Una sola 404 para todo el sitio: en español, con la salida en inglés al lado.
+const t = ui.es.notFound;
 ---
 
-<Base title="Página no encontrada" description="Esta dirección no existe en el sitio.">
+<Base title={t.title} description={t.description}>
   <section class="shell py-24 lg:py-32">
     <h1 class="font-display text-[clamp(2rem,5.5vw,3.5rem)] leading-tight text-text">
-      Esta página no existe
+      {t.heading}
     </h1>
 
     <p class="measure mt-5 font-body text-lg text-muted">
-      Puede que el enlace esté viejo o que haya cambiado el nombre del proyecto.
+      {t.body}
     </p>
 
     <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-      <a
-        href="/"
-        class="btn-primary"
-      >
-        Ir al inicio
-      </a>
-      <a
-        href="/#proyectos"
-        class="btn-ghost"
-      >
-        Ver los proyectos
-      </a>
+      <a href="/" class="btn-primary">{t.home}</a>
+      <a href="/#proyectos" class="btn-ghost">{t.projects}</a>
+      <a href="/en" class="btn-ghost" lang="en">{ui.en.notFound.home} (English)</a>
     </div>
   </section>
 </Base>
