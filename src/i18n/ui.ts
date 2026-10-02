@@ -177,13 +177,13 @@ export const ui: Record<Lang, Dict> = {
     askMe: 'Consultame',
     about: {
       paragraphs: [
-        'Estoy terminando Ingeniería en Sistemas en la UNICEN, en Tandil. Construyo sistemas completos de punta a punta: la interfaz web, los datos y la integración con IA. Trabajo tanto en proyectos propios como para clientes, y me interesa especialmente resolver problemas concretos de un negocio con la tecnología justa.',
-        'Busco un part-time remoto o híbrido y proyectos freelance. Tengo certificaciones de inglés de Cambridge.',
+        'Estoy finalizando la carrera de Ingeniería en Sistemas en la UNICEN, en Tandil. Construyo sistemas completos de punta a punta: la interfaz web, los datos y la integración con IA. Trabajo tanto en proyectos propios como para clientes, y me interesa especialmente resolver problemas concretos de un negocio con la tecnología justa.',
+        'Busco trabajo remoto o híbrido y proyectos freelance. Tengo certificaciones de inglés de Cambridge.',
       ],
       facts: [
         { label: 'Carrera', value: 'Ing. en Sistemas · UNICEN' },
         { label: 'Base', value: 'Tandil, Buenos Aires' },
-        { label: 'Busco', value: 'Part-time remoto/híbrido y freelance' },
+        { label: 'Busco', value: 'Trabajo remoto/híbrido y freelance' },
         { label: 'Inglés', value: 'Certificaciones de Cambridge' },
       ],
     },
@@ -293,12 +293,12 @@ export const ui: Record<Lang, Dict> = {
     about: {
       paragraphs: [
         "I'm finishing my Systems Engineering degree at UNICEN, in Tandil, Argentina. I build complete systems end to end: the web interface, the data and the AI integration. I work on my own projects as well as for clients, and I especially enjoy solving a business's concrete problems with just the right technology.",
-        "I'm looking for a remote or hybrid part-time role and freelance projects. I hold Cambridge English certifications.",
+        "I'm looking for a remote or hybrid job and freelance projects. I hold Cambridge English certifications.",
       ],
       facts: [
         { label: 'Degree', value: 'Systems Engineering · UNICEN' },
         { label: 'Based in', value: 'Tandil, Buenos Aires, Argentina' },
-        { label: 'Looking for', value: 'Remote/hybrid part-time & freelance' },
+        { label: 'Looking for', value: 'Remote/hybrid job & freelance' },
         { label: 'English', value: 'Cambridge certifications' },
       ],
     },
